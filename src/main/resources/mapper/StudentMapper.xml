@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="impl.mapper.StudentMapper">
+    <select id="queryStudentInfo" parameterType="model.StudentDTO" resultType="model.StudentDTO">
+        select * from public.student where name=#{name};
+    </select>
+
+    <select id="queryStudentInfos" parameterType="model.StudentInfoVo" resultType="model.StudentInfoVo">
+        select * from public.student where 1 = 1
+        <if test="studentNo != null and studentNo != ''">
+            AND studentNo=#{studentNo}
+        </if>
+        <if test="name != null and name != ''">
+            AND name=#{name}
+        </if>
+        <if test="age != null and age != ''">
+            AND age=#{age}
+        </if>
+        <if test="city != null and city != ''">
+            AND city=#{city}
+        </if>
+    </select>
+
+    <insert id="creatStudentInfo" parameterType="model.StudentInfoVo">
+        insert into public.student(studentNo, name, age, city) values (#{studentNo},#{name},#{age},#{city})
+    </insert>
+    
+    <delete id="deleteStudentInfo" parameterType="model.StudentInfoVo">
+        delete from public.student where studentNo = #{studentNo}
+    </delete>
+    
+    <delete id="deleteStudentInfos" parameterType="java.util.List">
+        delete from public.student where studentNo in (
+        <foreach collection="list" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </delete>
+</mapper>
