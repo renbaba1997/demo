@@ -20,7 +20,7 @@ public class StudentInfoVo extends BaseSearchVo implements Serializable {
     /**
      * 学生年龄
      */
-    private int age;
+    private Integer age;
 
     /**
      * 学生所在城市
