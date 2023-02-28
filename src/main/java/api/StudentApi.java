@@ -7,6 +7,7 @@ import model.StudentInfoVo;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -37,4 +38,7 @@ public interface StudentApi {
 
     @GetMapping("/downloadTable")
     void downTable(HttpServletResponse response, @RequestParam(value = "studentNos") List<String> studentNos) throws IOException;
+
+    @PostMapping("/importTable")
+    void importTable(@RequestParam("files") MultipartFile file) throws IOException;
 }

@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"api", "config", "controller", "impl", "impl.mapper", "impl.serviceImpl"})
+@ComponentScan(basePackages = {"api", "config", "controller", "impl", "impl.mapper", "impl.serviceImpl", "listener"})
 @MapperScan("impl.mapper")
 @EnableConfigurationProperties
 public class DemoApplication {

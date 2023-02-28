@@ -13,6 +13,8 @@ import org.apache.tomcat.util.http.fileupload.impl.IOFileUploadException;
 import org.burningwave.core.assembler.StaticComponentContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import utils.EasyExcelUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -100,21 +102,18 @@ public class StudentController implements StudentApi {
 
     @Override
     public void downTemplate(HttpServletResponse response) throws IOException {
-        StaticComponentContainer.Modules.exportAllToAll();
-        //设置防止文件名中文乱码
         List<Student> resList = new ArrayList<>();
-        Student test1 = new Student();
-        test1.setStudentNo("20230210");
-        test1.setName("小军");
-        test1.setAge(25);
-        test1.setCity("三元");
-        resList.add(test1);
-        String fileName = URLEncoder.encode("studentTemplate", "utf-8");
-        response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("utf-8"),"ISO8859-1") + ".xlsx");
-        EasyExcel.write(response.getOutputStream(), Student.class).sheet("学生信息模板表").doWrite(resList);
+        EasyExcelUtils.EasyExcelDownload(response, Student.class, resList, "学生信息模板表");
     }
 
     @Override
     public void downTable(HttpServletResponse response, List<String> studentNos) throws IOException {
+        List<Student> resList = studentService.getStudentInfos(studentNos);
+        EasyExcelUtils.EasyExcelDownload(response, Student.class, resList,"学生信息导出表");
+    }
+
+    @Override
+    public void importTable(MultipartFile file) throws IOException {
+        studentService.importTable(file);
     }
 }

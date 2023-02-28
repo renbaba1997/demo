@@ -39,4 +39,12 @@
         </foreach>
         )
     </delete>
+    
+    <select id="getStudentInfos" parameterType="java.util.List" resultType="model.Student">
+        select * from public.student where studentNo in (
+        <foreach collection="list" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </select>
 </mapper>

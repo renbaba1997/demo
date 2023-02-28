@@ -5,13 +5,17 @@ import com.github.pagehelper.PageInfo;
 import common.PaginationResult;
 import impl.StudentService;
 import impl.mapper.StudentMapper;
+import listener.DataListener;
 import lombok.extern.slf4j.Slf4j;
+import model.Student;
 import model.StudentDTO;
 import model.StudentInfoVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import com.alibaba.excel.EasyExcel;
 
 import java.util.List;
 
@@ -24,6 +28,8 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
 
+    @Autowired
+    private DataListener dataListener;
     @Override
     public StudentDTO queryStudentInfo(StudentDTO studentDTO) {
         logger.info("查询学生的年龄为{}", studentDTO.getAge());
@@ -56,5 +62,19 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public int deleteStudentInfos(List<String> studentNos) {
         return studentMapper.deleteStudentInfos(studentNos);
+    }
+
+    @Override
+    public List<Student> getStudentInfos(List<String> studentNos) {
+        return studentMapper.getStudentInfos(studentNos);
+    }
+
+    @Override
+    public void importTable(MultipartFile file) {
+        try {
+            EasyExcel.read(file.getInputStream(), Student.class, dataListener).sheet().doRead();
+        } catch (Exception e) {
+            logger.info("批量导入数据失败！");
+        }
     }
 }
